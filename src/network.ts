@@ -61,12 +61,12 @@ export const probe: ProbeFn = (url, request, options) => new Promise((resolve,re
     // Resolve and validate at the actual connection boundary; disallow DNS rebinding to private IPs.
     lookup:(hostname, opts, cb)=>{
       dnsLookup(hostname,{all:true,verbatim:true},(err,addresses)=>{
-        if(err){cb(err,undefined,undefined);return;}
+        if(err){cb(err,'',4);return;}
         if(!addresses.length || (!options.allowPrivate && addresses.some(entry=>!isSafeAddress(entry.address)))){
-          cb(new Error('DNS resolveu endereço não permitido'),undefined,undefined);return;
+          cb(new Error('DNS resolveu endereço não permitido'),'',4);return;
         }
         const entry=addresses.find(x=>x.family===4)??addresses[0];
-        cb(null,entry.address,entry.family);
+        cb(null,opts.all ? addresses : entry.address,opts.all ? undefined : entry.family);
       });
     }
   },res=>{
