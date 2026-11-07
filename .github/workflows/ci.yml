@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Install dependencies (no lifecycle scripts)
-        run: npm install --ignore-scripts --no-fund --no-audit
+        run: npm ci --ignore-scripts --no-fund --no-audit
       - name: Typecheck
         run: npm run typecheck
       - name: Integration and unit tests
